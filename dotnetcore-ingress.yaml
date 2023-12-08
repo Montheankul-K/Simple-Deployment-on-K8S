@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: dotnetcore-ing
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: dotnetcore
+  rules:
+  - http:
+      paths:
+      - path: /dotnetcore
+        pathType: Prefix
+        backend:
+          service:
+            name: dotnetcore-service
+            port:
+              number: 8080

@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dotnetcore-deployment
+  labels:
+    app: dotnetcore
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: dotnetcore
+  template:
+    metadata:
+      labels:
+        app: dotnetcore
+    spec:
+      containers:
+        - name: dotnetcore-container
+          image: mcr.microsoft.com/dotnet/samples:aspnetapp
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - mountPath: /app/appsettings.json
+              subPath: appsettings.json
+              readOnly: true
+              name: appsetting-volume
+      volumes:
+        - name: appsetting-volume
+          configMap:
+            name: appsettings-configmap
+            items:
+              - key: appsettings.json
+                path: appsettings.json
+        - name: log
+          emptyDir: {}
